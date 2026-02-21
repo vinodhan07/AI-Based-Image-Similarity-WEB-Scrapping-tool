@@ -11,7 +11,7 @@ export default function Footer() {
                     <span>HerSafe <em>Space</em></span>
                 </div>
                 <p className="footer-note">Built for the HackOps Hackathon 2026 — Empowering women's digital safety through AI.</p>
-                <p className="footer-team">Developed by <strong>Sabareswaran</strong> & <strong>Prasanna Venkatesh</strong></p>
+                <p className="footer-team">Developed by <strong>Team Hackops</strong></p>
                 <p className="footer-copy">&copy; 2026 HerSafe Space. All rights reserved.</p>
             </div>
         </footer>

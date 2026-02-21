@@ -107,10 +107,38 @@ def search_image(image_input, threshold=0.78):
                 source_url = row[0] if row else "Unknown Source"
                 file_path = row[1] if row else None
                 
+                # Mock Vulnerability Assessment Logic
+                # In a real scenario, this would rely on a threat intelligence API or domain analysis
+                vuln_score = 0
+                vuln_level = "Low"
+                vuln_desc = "Standard public profile. Low risk of impersonation."
+                
+                if "facebook.com" in source_url:
+                    vuln_score = 45
+                    vuln_level = "Medium"
+                    vuln_desc = "Found on public social media. Potential for unauthorized cloning."
+                elif "twitter.com" in source_url:
+                    vuln_score = 65
+                    vuln_level = "High"
+                    vuln_desc = "Found on microblogging site. High risk of rapid viral dissemination."
+                elif "reddit.com" in source_url:
+                    vuln_score = 85
+                    vuln_level = "Critical"
+                    vuln_desc = "Found on anonymous forum. High risk of malicious manipulation."
+                elif "instagram.com" in source_url:
+                    vuln_score = 30
+                    vuln_level = "Low"
+                    vuln_desc = "Found on visual platform. Monitor for unauthorized commercial use."
+                
                 matches.append({
                     "similarity": round(score, 4),
                     "source_url": source_url,
-                    "file_path": file_path
+                    "file_path": file_path,
+                    "vulnerability": {
+                        "score": vuln_score,
+                        "level": vuln_level,
+                        "description": vuln_desc
+                    }
                 })
                 
         conn.close()

@@ -117,6 +117,36 @@ export default function ResultStep({ isActive, scanResult, uploadedImage, onRese
                                 {sourceUrl}
                             </a>
                         </div>
+
+                        {/* Vulnerability Assessment Row */}
+                        {topMatch?.vulnerability && (
+                            <>
+                                <div className="detail-row" style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--border)' }}>
+                                    <span className="detail-label" style={{ color: 'var(--brand-1)' }}>Vulnerability Risk</span>
+                                    <span className="detail-value" style={{
+                                        display: 'inline-block',
+                                        padding: '4px 12px',
+                                        borderRadius: '20px',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 800,
+                                        background: topMatch.vulnerability.level === 'Critical' ? '#fee2e2' :
+                                            topMatch.vulnerability.level === 'High' ? '#ffedd5' :
+                                                topMatch.vulnerability.level === 'Medium' ? '#fef3c7' : '#dcfce3',
+                                        color: topMatch.vulnerability.level === 'Critical' ? '#dc2626' :
+                                            topMatch.vulnerability.level === 'High' ? '#ea580c' :
+                                                topMatch.vulnerability.level === 'Medium' ? '#d97706' : '#16a34a'
+                                    }}>
+                                        {topMatch.vulnerability.level} Risk ({topMatch.vulnerability.score}/100)
+                                    </span>
+                                </div>
+                                <div className="detail-row" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '4px' }}>
+                                    <span className="detail-label">Risk Assessment</span>
+                                    <span className="detail-value" style={{ fontSize: '0.85rem', color: 'var(--text-sec)', fontWeight: 500 }}>
+                                        {topMatch.vulnerability.description}
+                                    </span>
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     {/* Additional Matches Grid */}
