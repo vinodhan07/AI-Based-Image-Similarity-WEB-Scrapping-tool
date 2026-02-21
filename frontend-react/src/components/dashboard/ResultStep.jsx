@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function ResultStep({ isActive, scanResult, uploadedImage, onReset }) {
+    const [selectedIndex, setSelectedIndex] = useState(0);
+
+    // Reset selection when new result arrives
+    useEffect(() => {
+        setSelectedIndex(0);
+    }, [scanResult]);
+
     if (!isActive) return null;
 
     const isSafe = scanResult?.status !== 'FOUND';
     const matches = scanResult?.matches || [];
-    const topMatch = matches.length > 0 ? matches[0] : null;
+    const topMatch = matches.length > 0 ? matches[selectedIndex] || matches[0] : null;
     const score = topMatch ? Math.round((topMatch.similarity || 0) * 100) : 0;
     const sourceUrl = topMatch?.source_url || '#';
 
@@ -85,7 +92,7 @@ export default function ResultStep({ isActive, scanResult, uploadedImage, onRese
                             </div>
                         )}
                         <div className="compare-card match-card">
-                            <span className="compare-label match-label">Matched Image</span>
+                            <span className="compare-label match-label">Match #{selectedIndex + 1}</span>
                             <div className="compare-img-wrap">
                                 <img src={matchedImageUrl} alt="Matched" />
                             </div>
@@ -114,42 +121,77 @@ export default function ResultStep({ isActive, scanResult, uploadedImage, onRese
 
                     {/* Additional Matches Grid */}
                     {matches.length > 1 && (
-                        <div className="other-matches" style={{ marginTop: '32px' }}>
-                            <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-pri)', marginBottom: '16px' }}>
-                                Other Potential Matches ({matches.length - 1})
+                        <div className="other-matches" style={{ marginTop: '36px', paddingTop: '24px', borderTop: '1px dashed var(--border)' }}>
+                            <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--brand-1)', marginBottom: '16px' }}>
+                                Found {matches.length} Similar Images
                             </h4>
                             <div className="matches-grid" style={{
                                 display: 'grid',
                                 gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
                                 gap: '16px'
                             }}>
-                                {matches.slice(1).map((m, i) => {
+                                {matches.map((m, i) => {
                                     const mScore = Math.round((m.similarity || 0) * 100);
+                                    const isSelected = i === selectedIndex;
+
                                     return (
-                                        <div key={i} className="mini-match-card" style={{
-                                            border: '1px solid var(--border)',
-                                            borderRadius: '12px',
-                                            padding: '10px',
-                                            background: '#fff',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: '8px'
-                                        }}>
+                                        <div
+                                            key={i}
+                                            className="mini-match-card"
+                                            onClick={() => setSelectedIndex(i)}
+                                            style={{
+                                                border: isSelected ? '2px solid var(--brand-1)' : '1px solid var(--border)',
+                                                borderRadius: '12px',
+                                                padding: '10px',
+                                                background: isSelected ? 'rgba(108, 92, 231, 0.05)' : '#fff',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '8px',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.2s ease',
+                                                transform: isSelected ? 'translateY(-2px)' : 'none',
+                                                boxShadow: isSelected ? '0 6px 16px rgba(108, 92, 231, 0.15)' : 'none',
+                                                position: 'relative'
+                                            }}
+                                        >
+                                            {/* Rank Badge */}
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '-8px',
+                                                right: '-8px',
+                                                background: isSelected ? 'var(--brand-1)' : '#cbd5e1',
+                                                color: '#fff',
+                                                width: '24px',
+                                                height: '24px',
+                                                borderRadius: '50%',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                fontSize: '0.75rem',
+                                                fontWeight: 800,
+                                                zIndex: 2,
+                                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                            }}>
+                                                #{i + 1}
+                                            </div>
+
                                             <div style={{
                                                 aspectRatio: '1',
                                                 borderRadius: '8px',
                                                 overflow: 'hidden',
                                                 background: '#f0f2f8'
                                             }}>
-                                                <img src={getImageUrl(m.file_path)} alt={`Match ${i + 2}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                <img
+                                                    src={getImageUrl(m.file_path)}
+                                                    alt={`Match ${i + 1}`}
+                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                />
                                             </div>
-                                            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-pri)' }}>
+                                            <div style={{ fontSize: '0.9rem', fontWeight: 800, color: isSelected ? 'var(--brand-1)' : 'var(--text-pri)' }}>
                                                 {mScore}% Match
                                             </div>
                                             <div style={{ fontSize: '0.75rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                                <a href={m.source_url} target="_blank" rel="noreferrer" style={{ color: 'var(--text-sec)', textDecoration: 'none' }}>
-                                                    {m.source_url}
-                                                </a>
+                                                <span style={{ color: 'var(--text-sec)' }}>{m.source_url.replace('https://www.', '')}</span>
                                             </div>
                                         </div>
                                     );
