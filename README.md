@@ -53,14 +53,21 @@ This tool allows you to:
 
 ## 📂 Project Structure
 
-AI-Based-Image-Similarity-WEB-Scrapping-tool/ │ ├── api/ \# Backend API
-endpoints ├── ingestion/ \# Web scraping logic ├── embedding/ \# AI
-embedding generation ├── vector_index/ \# Vector indexing logic ├──
-query/ \# Similarity search module ├── services/ \# Shared backend
-services ├── data/ \# Stored images and metadata ├── frontend-react/ \#
-React frontend application ├── tests/ \# Unit and integration tests ├──
-requirements.txt \# Python dependencies └── README.md
-
+```
+AI-Based-Image-Similarity-WEB-Scrapping-tool/
+│
+├── api/                # Backend API endpoints
+├── ingestion/          # Web scraping logic
+├── embedding/          # AI embedding generation
+├── vector_index/       # Vector indexing logic
+├── query/              # Similarity search module
+├── services/           # Shared backend services
+├── data/               # Stored images and metadata
+├── frontend-react/     # React frontend application
+├── tests/              # Unit and integration tests
+├── requirements.txt    # Python dependencies
+└── README.md
+```
 ------------------------------------------------------------------------
 
 ## 🛠 Installation Guide
@@ -169,10 +176,5 @@ No license specified. Consider adding MIT License.
 
 ------------------------------------------------------------------------
 
-## 👨‍💻 Author
-
-Thamaraiselvan10
-
-------------------------------------------------------------------------
-
 ⭐ If you find this project useful, give it a star on GitHub!
+
